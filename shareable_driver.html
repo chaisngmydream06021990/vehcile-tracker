@@ -174,7 +174,18 @@
                     updateLocation(driverId, latitude, longitude, speed, heading);
                 },
                 (error) => {
-                    log("Error: " + error.message);
+                    let msg = "Error: " + error.message;
+                    if (error.code === 1) {
+                        msg = "❌ Permission Denied! Please allow location access in your browser settings.";
+                        alert("Please reset browser permissions:\n1. Click the Lock/Info icon in the URL bar.\n2. Click 'Permissions' -> Reset.\n3. Refresh the page.");
+                    } else if (error.code === 2) {
+                        msg = "❌ Position Unavailable. Check your GPS/Data connection.";
+                    } else if (error.code === 3) {
+                        msg = "❌ Timeout. Moving to an open area might help.";
+                    }
+                    log(msg);
+                    statusIndicator.className = "status inactive";
+                    statusIndicator.textContent = "Status: Error ⚠️";
                 },
                 options
             );

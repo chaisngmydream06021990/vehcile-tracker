@@ -154,7 +154,16 @@
                     updateLocation(driverId, latitude, longitude, speed, heading);
                 },
                 (error) => {
-                    log("Error: " + error.message);
+                    let msg = "Error: " + error.message;
+                    if (error.code === 1) {
+                        msg = "❌ Permission Denied! Please allow location access in your browser settings.";
+                        alert("Permission Denied!\n\n1. Check if Phone GPS is ON.\n2. Click the Lock/Info icon in URL bar -> Reset Permissions.\n3. Refresh page.");
+                    } else if (error.code === 2) {
+                        msg = "❌ Position Unavailable. Check your GPS/Data connection.";
+                    } else if (error.code === 3) {
+                        msg = "❌ Timeout. Signal weak.";
+                    }
+                    log(msg);
                 },
                 options
             );
